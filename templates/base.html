@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Резюме</a>
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#about">Про себе</a></li>
+                <li class="nav-item"><a class="nav-link" href="#education">Освіта</a></li>
+                <li class="nav-item"><a class="nav-link" href="#skills">Навички</a></li>
+                <li class="nav-item"><a class="nav-link" href="#experience">Досвід роботи</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mt-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="text-center mt-4">
+        <p>&copy; 2024 Іван Струтинський</p>
+    </footer>
+</body>
+</html>
