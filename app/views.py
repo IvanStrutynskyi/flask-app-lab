@@ -3,9 +3,7 @@ from . import app
 
 @app.route('/')
 def main():
-    agent = request.user_agent
-    return render_template("home.html", agent=agent)
-
+    return render_template("base.html")
 
 @app.route('/homepage') 
 def home():
@@ -26,6 +24,6 @@ def greetings(name):
 
 @app.route("/admin")
 def admin():
-    to_url = url_for("greetings", name="administrator") + "?age=45"
+    to_url = url_for("greetings", name="administrator", age=45, _external=True)     # "http://localhost:8080/hi/administrator?age=45"
     print(to_url)
     return redirect(to_url)
