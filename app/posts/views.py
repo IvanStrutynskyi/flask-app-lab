@@ -11,10 +11,9 @@ posts = [
 def get_posts():
     return render_template("posts.html", posts=posts)
 
-
-@post_bp.route('/<int:id>')
+@post_bp.route('/<int:id>') 
 def detail_post(id):
-    post = next((p for p in posts if p['id'] == id), None)
-    if post is None:
+    if id > 3:
         abort(404)
+    post = posts[id-1]
     return render_template("detail_post.html", post=post)

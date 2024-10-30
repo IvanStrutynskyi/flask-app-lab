@@ -11,3 +11,5 @@ def home():
     agent = request.user_agent
 
     return render_template("home.html", agent=agent)
+
+
