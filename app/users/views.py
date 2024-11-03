@@ -7,7 +7,6 @@ def get_profile():
     if "username" in session:
         username_value = session["username"]
 
-        
         if request.method == "POST":
             cookie_key = request.form.get("cookie_key")
             cookie_value = request.form.get("cookie_value")
@@ -17,17 +16,17 @@ def get_profile():
             response = make_response(redirect(url_for("user_name.get_profile")))
 
             if action == "add":
-                
+                # Додавання куки
                 response.set_cookie(cookie_key, cookie_value, max_age=int(cookie_expiry))
                 flash(f"Кука '{cookie_key}' з значенням '{cookie_value}' була додана.", "success")
             elif action == "delete":
-               
+                # Видалення куки
                 response.set_cookie(cookie_key, '', expires=0)
                 flash(f"Кука '{cookie_key}' була видалена.", "success")
 
             return response
 
-        
+        # Отримання всіх куків для відображення на профілі
         cookies = request.cookies
         return render_template("profile.html", username=username_value, cookies=cookies)
 
@@ -37,16 +36,29 @@ def get_profile():
 @bp.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
-        username = request.form["login"]
-        session["username"] = username
-        flash("Success: session added successfully.", "success")
-        return redirect(url_for("user_name.get_profile"))
+        username = request.form["username"]  # Змінюємо на "username"
+        password = request.form["password"]  # Додаємо поле для пароля
+
+        # Статичні дані для автентифікації
+        correct_username = "Ivan"
+        correct_password = "12345"
+
+        # Перевірка введених даних
+        if username == correct_username and password == correct_password:
+            session["username"] = username
+            flash("Успіх: ви успішно ввійшли.", "success")
+            return redirect(url_for("user_name.get_profile"))
+        else:
+            flash("Помилка: Невірний логін або пароль.", "danger")
+            return redirect(url_for("user_name.login"))
+
     return render_template("login.html")
 
 @bp.route('/logout')
 def logout():
-   
+    # Вихід із сесії
     session.pop('username', None)
+    flash("Ви вийшли з системи.", "info")
     return redirect(url_for('user_name.get_profile'))
 
 @bp.route("/hi/<string:name>")
@@ -74,5 +86,5 @@ def get_cookie():
 @bp.route('/delete_cookie')
 def delete_cookie():
     response = make_response('Кука видалена')
-    response.set_cookie('username', '', expires=0)
+    response.set_cookie('username', '', expires=0)  # Видалення куки
     return response
