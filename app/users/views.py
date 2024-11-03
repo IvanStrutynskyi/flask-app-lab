@@ -26,7 +26,7 @@ def get_profile():
 
             return response
 
-        # Отримання всіх куків для відображення на профілі
+        
         cookies = request.cookies
         return render_template("profile.html", username=username_value, cookies=cookies)
 
@@ -36,14 +36,14 @@ def get_profile():
 @bp.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
-        username = request.form["username"]  # Змінюємо на "username"
-        password = request.form["password"]  # Додаємо поле для пароля
+        username = request.form["username"]  
+        password = request.form["password"]  
 
-        # Статичні дані для автентифікації
+        
         correct_username = "Ivan"
         correct_password = "12345"
 
-        # Перевірка введених даних
+        
         if username == correct_username and password == correct_password:
             session["username"] = username
             flash("Успіх: ви успішно ввійшли.", "success")
@@ -56,7 +56,7 @@ def login():
 
 @bp.route('/logout')
 def logout():
-    # Вихід із сесії
+    
     session.pop('username', None)
     flash("Ви вийшли з системи.", "info")
     return redirect(url_for('user_name.get_profile'))
