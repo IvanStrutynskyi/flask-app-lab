@@ -1,1 +1,1 @@
-SECRET_KEY = "secret-key-sdsfs"
+SECRET_KEY = "secret-key-ivans"

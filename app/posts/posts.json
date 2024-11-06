@@ -1,0 +1,20 @@
+[
+    {
+        "id": "20241106191815",
+        "title": "My day",
+        "content": "Hello",
+        "category": "tech",
+        "is_active": true,
+        "publish_date": "2024-11-06",
+        "author": "Ivan"
+    },
+    {
+        "id": "20241106191906",
+        "title": "Homework",
+        "content": "Hello today im doing my homework",
+        "category": "lifestyle",
+        "is_active": true,
+        "publish_date": "2024-11-05",
+        "author": "Ivan"
+    }
+]
