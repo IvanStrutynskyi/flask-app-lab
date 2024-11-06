@@ -9,5 +9,9 @@ class PostForm(FlaskForm):
     content = TextAreaField("Content", render_kw={"rows": 5, "cols": 40}, validators=[DataRequired()])
     is_active = BooleanField('Active Post')  
     publish_date = DateField('Publish Date', format='%Y-%m-%d', validators=[DataRequired()])  
-    category = SelectField('Category', choices=CATEGORIES, validators=[DataRequired()])  
+    category = SelectField('Category', choices=CATEGORIES, validators=[DataRequired()])
+    
+    # Додаємо поле для автора
+    author = StringField("Author", validators=[Length(max=100)])
+    
     submit = SubmitField("Add Post")

@@ -9,12 +9,21 @@
         "author": "Ivan"
     },
     {
-        "id": "20241106191906",
-        "title": "Homework",
-        "content": "Hello today im doing my homework",
+        "id": "20241106231544",
+        "title": "My story",
+        "content": "Today was so cold",
         "category": "lifestyle",
         "is_active": true,
-        "publish_date": "2024-11-05",
-        "author": "Ivan"
+        "publish_date": "2024-11-02",
+        "author": "Strutynskyi"
+    },
+    {
+        "id": "20241106231828",
+        "title": "hello friend",
+        "content": "Today i meet my friend Jack",
+        "category": "lifestyle",
+        "is_active": true,
+        "publish_date": "2024-11-04",
+        "author": "\u0410\u043d\u043e\u043d\u0456\u043c"
     }
 ]

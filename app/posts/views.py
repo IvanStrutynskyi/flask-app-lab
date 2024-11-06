@@ -21,7 +21,11 @@ def save_post(post):
 @post_bp.route('/add_post', methods=['GET', 'POST'])
 def add_post():
     form = PostForm()
+
     if form.validate_on_submit():
+        # Якщо поле автора порожнє, ставимо дефолтне значення
+        author = form.author.data if form.author.data else "Анонім"
+        
         post = {
             "id": datetime.now().strftime('%Y%m%d%H%M%S'),  
             "title": form.title.data,
@@ -29,7 +33,7 @@ def add_post():
             "category": form.category.data,
             "is_active": form.is_active.data,
             "publish_date": form.publish_date.data.strftime('%Y-%m-%d'),
-            "author": "Ivan"  
+            "author": author  # Використовуємо введене ім'я автора або дефолтне "Анонім"
         }
         
         save_post(post)
