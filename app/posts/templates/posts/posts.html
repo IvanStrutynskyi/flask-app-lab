@@ -1,35 +1,61 @@
 {% extends 'base.html' %}
-{% block title %} POSTS {% endblock %}
+
+{% block title %}POSTS{% endblock %}
 
 {% block css %} 
     <link rel="stylesheet" href="{{ url_for('.static', filename='css/posts.css') }}">
 {% endblock %}
 
 {% block content %}
+
 <h1 class="myclass">Articles</h1>
 
 <div class="container mt-5">
-    <!-- Кнопка для додавання посту -->
-    <form action="{{ url_for('.add_post') }}" class="mb-4">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+
+
+
+        <!-- Кнопка для додавання посту -->
+     <form action="{{ url_for('.add_post') }}" class="mb-4">
         <button type="submit" class="btn btn-primary">Add post</button>
     </form>
-
-    <!-- Відображення списку постів у вигляді карток -->
     <div class="row">
         {% for post in posts %}
-        <div class="col-md-4 mb-3">
-            <div class="card h-100">
-                <img src="{{ url_for('.static', filename='img/default.png') }}" 
-                        class="card-img-top" height="150px">
-                <div class="card-body">
-                    <h5 class="card-title">{{ post["title"] | title }}</h5> 
-                    <p class="card-text">Post ID: {{ post["id"] }}</p>
-                    <p class="card-text">{{ post["content"] | truncate(23) }}</p>
-                    <a href="{{ url_for('.detail_post', id=post['id']) }}" class="btn btn-outline-primary">View Post</a>
+            <div class="col-md-6 col-lg-4 mt-5">
+                <div class="blog-grid">
+                    <div class="blog-grid-img position-relative">
+                        <img src="{{ url_for('.static', filename='img/default.png') }}">
+                    </div>
+                    <div class="blog-grid-text p-4">
+                        <h3 class="h5 mb-3">
+                            <a href="{{ url_for('posts.detail_post', id=post['id']) }}">{{ post['title'] }}</a>
+                        </h3>
+                        <p class="display-30">{{ post['content'][:100] }}...</p>
+                        <div class="meta meta-style2">
+                            <ul>
+                                <li><a href="#!"><i class="fas fa-calendar-alt"></i> {{ post['publish_date'] }}</a></li>
+                                <li><a href="#!"><i class="fas fa-user"></i> {{ post['author'] }}</a></li>
+                                <li><a href="#!"><i class="fas fa-comments"></i> 0</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
+    </div>
+    <div class="row mt-6">
+        <div class="col-12">
+            <div class="pagination text-small text-uppercase text-extra-dark-gray">
+                <ul>
+                    <li><a href="#!"><i class="fas fa-long-arrow-alt-left me-1 d-none d-sm-inline-block"></i> Prev</a></li>
+                    <li class="active"><a href="#!">1</a></li>
+                    <li><a href="#!">2</a></li>
+                    <li><a href="#!">3</a></li>
+                    <li><a href="#!">Next <i class="fas fa-long-arrow-alt-right ms-1 d-none d-sm-inline-block"></i></a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 
