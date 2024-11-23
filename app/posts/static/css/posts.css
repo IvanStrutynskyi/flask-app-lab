@@ -1,0 +1,9 @@
+.myclass {
+    background-color: #800080; 
+    padding: 10px; 
+    border-radius: 5px; 
+    color: #333; 
+    font-family: Arial, sans-serif; 
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
+}
+
