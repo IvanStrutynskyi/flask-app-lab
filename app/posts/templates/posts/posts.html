@@ -34,11 +34,15 @@
                         <p class="display-30">{{ post['content'][:100] }}...</p>
                         <div class="meta meta-style2">
                             <ul>
-                                <li><a href="#!"><i class="fas fa-calendar-alt"></i> {{ post['publish_date'] }}</a></li>
+                                <li><a href="#!"><i class="fas fa-calendar-alt"></i> {{ post.posted.strftime('%Y-%m-%d %H:%M') }}</a></li>
                                 <li><a href="#!"><i class="fas fa-user"></i> {{ post['author'] }}</a></li>
                                 <li><a href="#!"><i class="fas fa-comments"></i> 0</a></li>
                             </ul>
                         </div>
+                                                <!-- Кнопка для видалення поста -->
+                                                <form action="{{ url_for('posts.delete_post', id=post.id) }}" method="POST">
+                                                    <button type="submit" class="btn btn-danger mt-2">Delete</button>
+                        </form>
                     </div>
                 </div>
             </div>

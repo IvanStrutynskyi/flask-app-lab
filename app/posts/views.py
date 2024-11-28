@@ -1,71 +1,80 @@
-import json
 from . import post_bp
-from flask import render_template, abort, flash, redirect, url_for
+from flask import render_template, request, abort, flash, redirect, url_for
 from .forms import PostForm
-from datetime import datetime
+from .models import Post
+from app import db
 
-POSTS_FILE = 'app/posts/posts.json'  
+from .utils import save_post, load_posts, get_post
 
-def save_post(post):
-    try:
-        with open(POSTS_FILE, 'r') as f:
-            posts = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        posts = []
-
-    posts.append(post)
-
-    with open(POSTS_FILE, 'w') as f:
-        json.dump(posts, f, indent=4)
-
+# Функція для додавання поста
 @post_bp.route('/add_post', methods=['GET', 'POST'])
 def add_post():
     form = PostForm()
-
     if form.validate_on_submit():
-        # Якщо поле автора порожнє, ставимо дефолтне значення
-        author = form.author.data if form.author.data else "Анонім"
+        title = form.title.data
+        content = form.content.data
+        category = form.category.data  # Додаємо категорію
+        author = form.author.data  # Додаємо автора
+        is_active = form.is_active.data  # Додаємо поле активності
+        publish_date = form.publish_date.data  # Додаємо дату публікації
         
-        post = {
-            "id": datetime.now().strftime('%Y%m%d%H%M%S'),  
-            "title": form.title.data,
-            "content": form.content.data,
-            "category": form.category.data,
-            "is_active": form.is_active.data,
-            "publish_date": form.publish_date.data.strftime('%Y-%m-%d'),
-            "author": author  # Використовуємо введене ім'я автора або дефолтне "Анонім"
-        }
+        # Створюємо новий пост
+        post_new = Post(
+            title=title, 
+            content=content, 
+            category=category,
+            author=author,
+            is_active=is_active,
+            posted=publish_date  # Це поле зберігається як "posted"
+        )
         
-        save_post(post)
-        flash(f'Post "{form.title.data}" added successfully!', 'success')
+        # Додаємо пост до сесії та зберігаємо його в базі даних
+        db.session.add(post_new)
+        db.session.commit()
+        
+        # Сповіщаємо про успішне додавання поста
+        flash(f'Post "{title}" added successfully!', 'success')
+        
+        # Переходимо до списку постів
         return redirect(url_for('.get_posts'))
     
+    elif form.errors:
+        flash(f"Enter the correct data in the form!", "danger")
+   
     return render_template("add_post.html", form=form)
+# Доданий маршрут для видалення поста
+@post_bp.route('/delete_post/<int:id>', methods=['GET', 'POST'])
+def delete_post(id):
+    # Отримуємо пост по id
+    post = Post.query.get(id)
+    
+    if post:
+        # Видаляємо пост з бази даних
+        db.session.delete(post)
+        db.session.commit()
 
-@post_bp.route('/posts')
+        # Сповіщаємо про успішне видалення
+        flash(f'Post "{post.title}" deleted successfully!', 'success')
+    else:
+        # Якщо пост не знайдений, сповіщаємо про помилку
+        flash('Post not found!', 'danger')
+    
+    # Переходимо до списку постів після видалення
+    return redirect(url_for('posts.get_posts'))
+
+# Функція для отримання всіх постів
+@post_bp.route('/') 
 def get_posts():
-    try:
-        with open(POSTS_FILE, 'r') as f:
-            posts = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        posts = []
-
+    stmt = db.select(Post).order_by(Post.posted.desc())  # Отримуємо всі пости, відсортовані за датою публікації по спаданні
+    posts = db.session.scalars(stmt).all()  # Виконуємо запит і отримуємо всі пости
     return render_template("posts.html", posts=posts)
 
-@post_bp.route('/posts/<int:id>')
-def detail_post(id):
-    try:
-        with open(POSTS_FILE, 'r') as f:
-            posts = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        abort(404)
-    
-    post = next((post for post in posts if int(post["id"]) == id), None)
-    if post is None:
-        abort(404)
-    
-    return render_template("detail_post.html", post=post)
 
-@post_bp.app_errorhandler(404)
-def page_not_found(error):
-    return render_template('404.html'), 404
+@post_bp.route('/<int:id>')
+def detail_post(id):
+    # Отримуємо пост із бази даних за id
+    post = Post.query.get(id)
+    if post:
+        return render_template('detail_post.html', post=post)
+    return abort(404)  # Якщо пост не знайдений, повертаємо помилку 404
+

@@ -1,24 +1,44 @@
-{% extends 'base.html' %}
-
-{% block title %} Add POST {% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
-   <br>
-   <form action="" method="post" novalidate>
-       {{ form.hidden_tag() }}
+  <h1>Add New Post</h1>
 
-       {% from 'form_macros.html' import render_field %}
-       {{ render_field(form.title) }}
-       {{ render_field(form.content) }}
-       {{ render_field(form.is_active) }}  
-       {{ render_field(form.publish_date) }}  
-       {{ render_field(form.category) }}  
+  <form method="POST">
+    {{ form.hidden_tag() }}  
+    
+    <div>
+      <label for="title">Title</label>
+      {{ form.title(class="form-control") }}
+    </div>
 
-       <!-- Додаємо поле для автора -->
-       {{ render_field(form.author) }}  
+    <div>
+      <label for="content">Content</label>
+      {{ form.content(class="form-control") }}
+    </div>
 
-       {{ form.submit(class="btn btn-primary") }}
-   </form>
+    <div>
+      <label for="category">Category</label>
+      {{ form.category(class="form-control") }}
+    </div>
 
+    <div>
+      <label for="author">Author</label>
+      {{ form.author(class="form-control") }}
+    </div>
+
+    <div>
+      <label for="is_active">Is Active</label>
+      {{ form.is_active() }}
+    </div>
+
+    <div>
+      <label for="publish_date">Publish Date</label>
+      {{ form.publish_date(class="form-control") }}
+    </div>
+
+    <div>
+      <button type="submit" class="btn btn-primary">Add Post</button>
+    </div>
+  </form>
    <a href="{{ url_for("posts.get_posts") }}">Return posts</a>
 {% endblock %}
