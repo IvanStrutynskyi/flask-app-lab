@@ -14,12 +14,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
 
-
-
-        <!-- Кнопка для додавання посту -->
-     <form action="{{ url_for('.add_post') }}" class="mb-4">
+    <!-- Кнопка для додавання посту -->
+    <form action="{{ url_for('.add_post') }}" class="mb-4">
         <button type="submit" class="btn btn-primary">Add post</button>
     </form>
+
     <div class="row">
         {% for post in posts %}
             <div class="col-md-6 col-lg-4 mt-5">
@@ -39,15 +38,20 @@
                                 <li><a href="#!"><i class="fas fa-comments"></i> 0</a></li>
                             </ul>
                         </div>
-                                                <!-- Кнопка для видалення поста -->
-                                                <form action="{{ url_for('posts.delete_post', id=post.id) }}" method="POST">
-                                                    <button type="submit" class="btn btn-danger mt-2">Delete</button>
+
+                        <!-- Кнопка для редагування поста -->
+                        <a href="{{ url_for('posts.edit_post', id=post.id) }}" class="btn btn-warning mt-2">Edit</a>
+
+                        <!-- Кнопка для видалення поста -->
+                        <form action="{{ url_for('posts.delete_post', id=post.id) }}" method="POST">
+                            <button type="submit" class="btn btn-danger mt-2">Delete</button>
                         </form>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
+
     <div class="row mt-6">
         <div class="col-12">
             <div class="pagination text-small text-uppercase text-extra-dark-gray">

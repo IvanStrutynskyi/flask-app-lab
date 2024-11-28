@@ -42,6 +42,7 @@ def add_post():
         flash(f"Enter the correct data in the form!", "danger")
    
     return render_template("add_post.html", form=form)
+
 # Доданий маршрут для видалення поста
 @post_bp.route('/delete_post/<int:id>', methods=['GET', 'POST'])
 def delete_post(id):
@@ -78,3 +79,33 @@ def detail_post(id):
         return render_template('detail_post.html', post=post)
     return abort(404)  # Якщо пост не знайдений, повертаємо помилку 404
 
+# Доданий маршрут для редагування поста
+@post_bp.route('/edit_post/<int:id>', methods=['GET', 'POST'])
+def edit_post(id):
+    # Отримуємо пост із бази даних за id
+    post = Post.query.get(id)
+    if not post:
+        flash('Post not found!', 'danger')
+        return redirect(url_for('.get_posts'))
+
+    form = PostForm(obj=post)  # Заповнюємо форму існуючими даними поста
+
+    if form.validate_on_submit():
+        # Оновлюємо пост на основі даних форми
+        post.title = form.title.data
+        post.content = form.content.data
+        post.category = form.category.data
+        post.author = form.author.data
+        post.is_active = form.is_active.data
+        post.posted = form.publish_date.data
+
+        # Зберігаємо оновлені дані в базі даних
+        db.session.commit()
+
+        # Сповіщаємо про успішне редагування
+        flash(f'Post "{post.title}" updated successfully!', 'success')
+        
+        # Переходимо до детальної сторінки цього поста
+        return redirect(url_for('.detail_post', id=post.id))
+
+    return render_template('edit_post.html', form=form, post=post)
